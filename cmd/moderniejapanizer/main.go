@@ -7,6 +7,7 @@ import (
 	"github.com/hnakamur/ieversionlocker"
 	"github.com/hnakamur/moderniejapanizer"
 	"github.com/hnakamur/w32syscall"
+	"github.com/hnakamur/w32timezone"
 	"github.com/hnakamur/windowsupdate"
 	"github.com/mattn/go-ole"
 )
@@ -25,6 +26,15 @@ func main() {
 	if err != nil {
 		fmt.Println("Failed to lock IE version: %s", err)
 		os.Exit(1)
+	}
+
+	tzi, err := w32timezone.BuildDynamicTimeZoneInformation("Tokyo Standard Time")
+	if err != nil {
+		panic(err)
+	}
+	err = w32timezone.SetSystemTimeZone(tzi)
+	if err != nil {
+		panic(err)
 	}
 
 	_, _, err = windowsupdate.InstallLanguagePack(windowsupdate.JapaneseLanguagePackUpdateID)
