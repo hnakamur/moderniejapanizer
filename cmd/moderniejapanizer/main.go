@@ -9,7 +9,6 @@ import (
 	"github.com/hnakamur/w32syscall"
 	"github.com/hnakamur/w32timezone"
 	"github.com/hnakamur/w32version"
-	"github.com/hnakamur/windowsupdate"
 	"github.com/mattn/go-ole"
 )
 
@@ -81,14 +80,6 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println("schedule display change after reboot. done")
-
-	fmt.Println("start installing important windows updates...")
-	_, _, err = windowsupdate.InstallImportantUpdates()
-	if err != nil {
-		fmt.Printf("Error while installing important windows updates: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Println("install important windows updates. done")
 
 	err = moderniejapanizer.Reboot(w32syscall.SHTDN_REASON_MINOR_SECURITYFIX)
 	if err != nil {
