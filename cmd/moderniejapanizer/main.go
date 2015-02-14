@@ -68,7 +68,7 @@ func main() {
 
 	err = moderniejapanizer.SetKeyboards([]string{
 		moderniejapanizer.JapaneseJapanKeyboardCode,
-		moderniejapanizer.EnglishUnitedStatesKeyboardCode})
+	})
 	if err != nil {
 		fmt.Printf("Error while setting keyboards: %v\n", err)
 		os.Exit(1)
