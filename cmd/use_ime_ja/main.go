@@ -32,52 +32,7 @@ func switchInputMethodJa() error {
 	if err != nil {
 		return err
 	}
-	time.Sleep(time.Second)
-	//jaListItem, err := findParentElementByChildName(auto, languageWin, "ja")
-	//if err != nil {
-	//	return err
-	//}
-	//err = wa.Invoke(jaListItem)
-	//if err != nil {
-	//	return err
-	//}
 
-	//err = invokeElementInWin(auto, root, "Language options", "Add an input method")
-	//if err != nil {
-	//	return err
-	//}
-
-	//err = invokeElementInWin(auto, root, "Input method", "Microsoft IME")
-	//if err != nil {
-	//	return err
-	//}
-
-	//err = invokeElementInWin(auto, root, "Language options", "Save")
-	//if err != nil {
-	//	return err
-	//}
-
-	//languageWin, err = findElementByName(auto, root, "Language")
-	//if err != nil {
-	//	return err
-	//}
-	//jaListItem, err = findParentElementByChildName(auto, languageWin, "ja")
-	//if err != nil {
-	//	return err
-	//}
-	//err = wa.Select(jaListItem)
-	//if err != nil {
-	//	return err
-	//}
-	//time.Sleep(time.Second)
-	//moveUpLink, err := findElementByName(auto, languageWin, "Move up")
-	//if err != nil {
-	//	return err
-	//}
-	//err = wa.Invoke(moveUpLink)
-	//if err != nil {
-	//	return err
-	//}
 	enUsListItem, err := findParentElementByChildName(auto, languageWin, "en-US")
 	if err != nil {
 		return err
@@ -86,7 +41,6 @@ func switchInputMethodJa() error {
 	if err != nil {
 		return err
 	}
-	time.Sleep(time.Second)
 	moveDownLink, err := findElementByName(auto, languageWin, "Move down")
 	if err != nil {
 		return err
@@ -95,7 +49,6 @@ func switchInputMethodJa() error {
 	if err != nil {
 		return err
 	}
-	time.Sleep(time.Second)
 	removeLink, err := findElementByName(auto, languageWin, "Remove")
 	if err != nil {
 		return err
@@ -106,27 +59,6 @@ func switchInputMethodJa() error {
 	}
 
 	return nil
-}
-
-func invokeElementInWin(auto *wa.IUIAutomation, root *wa.IUIAutomationElement, winName, elementName string) error {
-	element, err := getElementInWin(auto, root, winName, elementName)
-	if err != nil {
-		return err
-	}
-	err = wa.Invoke(element)
-	if err != nil {
-		return err
-	}
-	fmt.Printf("invoked %s in %s\n", elementName, winName)
-	return nil
-}
-
-func getElementInWin(auto *wa.IUIAutomation, root *wa.IUIAutomationElement, winName, elementName string) (*wa.IUIAutomationElement, error) {
-	win, err := findElementByName(auto, root, winName)
-	if err != nil {
-		return nil, err
-	}
-	return findElementByName(auto, win, elementName)
 }
 
 func findElementByName(auto *wa.IUIAutomation, start *wa.IUIAutomationElement, elementName string) (*wa.IUIAutomationElement, error) {
