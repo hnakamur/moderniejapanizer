@@ -76,21 +76,21 @@ func installLangPackJaWindows7() error {
 	}
 	defer session.Release()
 
-	fmt.Printf("Start searching...\n")
+	fmt.Printf("Start searching Japanees language pack in Windows Updates...\n")
 	update, err := session.FindByUpdateID(Windows7JapaneseLanguagePackUpdateID)
 	if err != nil {
 		return err
 	}
 
 	if update.Installed {
-		fmt.Printf("already installed. exiting\n")
+		fmt.Printf("Already installed. exiting\n")
 		return nil
 	}
 
 	updates := []windowsupdate.Update{update}
 
 	if update.Downloaded {
-		fmt.Printf("already downloaded, skip downloading\n")
+		fmt.Printf("Already downloaded, skip downloading\n")
 	} else {
 		err = session.Download(updates)
 		if err != nil {
@@ -102,6 +102,7 @@ func installLangPackJaWindows7() error {
 	if err != nil {
 		return err
 	}
+	fmt.Println("Installed Japanese language pack via Windows Update.")
 
 	fmt.Printf("ResultCode=%d, RebootRequired=%v\n", result.ResultCode, result.RebootRequired)
 	for i, ur := range result.UpdateResults {

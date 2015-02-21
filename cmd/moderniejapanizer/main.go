@@ -16,7 +16,8 @@ func main() {
 	ole.CoInitialize(0)
 	defer ole.CoUninitialize()
 
-	fmt.Println("start modern.IE Japanizer.")
+	fmt.Println("Start modern.IE Japanizer. Please wait until reboot.")
+
 	ieVersion, err := ieversionlocker.CurrentVersion()
 	if err != nil {
 		fmt.Println("Failed detect IE version: %s", err)
@@ -28,7 +29,7 @@ func main() {
 		fmt.Println("Failed to lock IE version: %s", err)
 		os.Exit(1)
 	}
-	fmt.Println("lock IE version. done")
+	fmt.Println("Locked IE version.")
 
 	tzi, err := w32timezone.BuildDynamicTimeZoneInformation("Tokyo Standard Time")
 	if err != nil {
@@ -38,19 +39,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("set timezone. done")
-
-	version, err := w32version.GetVersion()
-	if err != nil {
-		panic(err)
-	}
-
-	err = moderniejapanizer.InstallLangPackJa(version)
-	if err != nil {
-		fmt.Printf("Error while installing Japanese Language Pack: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Println("install Japanese language pack. done")
+	fmt.Println("Set timezone.")
 
 	err = moderniejapanizer.SetLanguageAndRegionalFormats(moderniejapanizer.JapaneseLanguageAndRegionalFormats)
 	if err != nil {
@@ -63,28 +52,38 @@ func main() {
 		fmt.Printf("Error while setting location: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Println("set location. done")
+	fmt.Println("Set location.")
 
-	err = moderniejapanizer.SetKeyboards([]string{
-		moderniejapanizer.JapaneseJapanKeyboardCode,
-	})
+	version, err := w32version.GetVersion()
 	if err != nil {
-		fmt.Printf("Error while setting keyboards: %v\n", err)
-		os.Exit(1)
+		panic(err)
 	}
-	fmt.Println("set keyboards. done")
 
 	err = moderniejapanizer.SwitchInputMethodJa(version)
 	if err != nil {
 		fmt.Printf("Error while setting display language: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Println("schedule display change after reboot. done")
+	fmt.Println("Switched language to Japanese.")
+
+	err = moderniejapanizer.InstallLangPackJa(version)
+	if err != nil {
+		fmt.Printf("Error while installing Japanese Language Pack: %v\n", err)
+		os.Exit(1)
+	}
+	fmt.Println("Installed Japanese language pack.")
+
+	err = moderniejapanizer.SetDisplayLanguage(moderniejapanizer.JapaneseDisplayLanguageCode)
+	if err != nil {
+		fmt.Printf("Error while setting display language to Japanese: %v\n", err)
+		os.Exit(1)
+	}
+	fmt.Println("Scheduled display change after reboot.")
 
 	err = moderniejapanizer.Reboot(w32syscall.SHTDN_REASON_MINOR_SECURITYFIX)
 	if err != nil {
 		fmt.Printf("Error while rebooting: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Println("rebooting...")
+	fmt.Println("Rebooting...")
 }
