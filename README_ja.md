@@ -26,7 +26,7 @@ moderniejapanizer
         2. "Command prompt"メニューで右クリックして"Run as administrator"メニューを選択します。
     * Windows 8か8.1の場合:
         1. Windowsキーを押しながらdを押してデスクトップウィンドウを開きます。
-        1. Windowsキーを押しながらxを押し、xを押して"Command Prompt (Admin)"メニューを選択します。
+        1. Windowsキーを押しながらxを押し、その後aを押して"Command Prompt (Admin)"メニューを選択します。
 4. 「管理者：コマンドプロンプト」開いたら以下のコマンドを実行し、仮想マシンが自動的に再起動されるまで待ちます。
     * `cd \Users\IEUser\Downloads`
     * `moderniejapanizer.exe`
