@@ -1,16 +1,29 @@
-package main
+package moderniejapanizer
 
 import (
-	"fmt"
-	"os"
 	"os/exec"
+	"syscall"
 	"time"
 
+	"github.com/hnakamur/w32registry"
 	wa "github.com/hnakamur/w32uiautomation"
-	"github.com/mattn/go-ole"
+	"github.com/hnakamur/w32version"
 )
 
-func switchInputMethodJa() error {
+func SwitchInputMethodJa(version w32version.W32Version) error {
+	if version == w32version.Windows7 || version == w32version.WindowsVista {
+		return installLangPackJaWindows7()
+	} else {
+		return switchInputMethodJaWin8()
+	}
+}
+
+// NOTE: You need to logoff or reboot for the display language to be changed
+func SetDisplayLanguage(displayLanguageCode string) error {
+	return w32registry.SetKeyValueMultiString(syscall.HKEY_CURRENT_USER, `Control Panel\Desktop`, "PreferredUILanguagesPending", []string{displayLanguageCode})
+}
+
+func switchInputMethodJaWin8() error {
 	err := exec.Command("control.exe", "/name", "Microsoft.Language").Start()
 	if err != nil {
 		return err
@@ -81,15 +94,4 @@ func getParentElement(auto *wa.IUIAutomation, element *wa.IUIAutomationElement) 
 	}
 	defer walker.Release()
 	return walker.GetParentElement(element)
-}
-
-func main() {
-	ole.CoInitialize(0)
-	defer ole.CoUninitialize()
-
-	err := switchInputMethodJa()
-	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-		os.Exit(1)
-	}
 }

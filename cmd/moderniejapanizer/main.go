@@ -74,7 +74,7 @@ func main() {
 	}
 	fmt.Println("set keyboards. done")
 
-	err = moderniejapanizer.SetDisplayLanguage(moderniejapanizer.JapaneseDisplayLanguageCode)
+	err = moderniejapanizer.SwitchInputMethodJa(version)
 	if err != nil {
 		fmt.Printf("Error while setting display language: %v\n", err)
 		os.Exit(1)
