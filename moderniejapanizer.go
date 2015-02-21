@@ -71,6 +71,11 @@ func SetLocation(locationCode string) error {
 	return w32registry.SetKeyValueString(syscall.HKEY_CURRENT_USER, `Control Panel\International\Geo`, "Nation", locationCode)
 }
 
+// NOTE: You need to logoff or reboot for the display language to be changed
+func SetDisplayLanguage(displayLanguageCode string) error {
+	return w32registry.SetKeyValueMultiString(syscall.HKEY_CURRENT_USER, `Control Panel\Desktop`, "PreferredUILanguagesPending", []string{displayLanguageCode})
+}
+
 func SetKeyboards(keyboardCodes []string) error {
 	for i, code := range keyboardCodes {
 		err := w32registry.SetKeyValueString(syscall.HKEY_CURRENT_USER, `Keyboard Layout\Preload`, strconv.Itoa(i+1), code)
@@ -79,11 +84,6 @@ func SetKeyboards(keyboardCodes []string) error {
 		}
 	}
 	return nil
-}
-
-// NOTE: You need to logoff or reboot for the display language to be changed
-func SetDisplayLanguage(displayLanguageCode string) error {
-	return w32registry.SetKeyValueMultiString(syscall.HKEY_CURRENT_USER, `Control Panel\Desktop`, "PreferredUILanguagesPending", []string{displayLanguageCode})
 }
 
 func SetLanguageAndRegionalFormats(formats map[string]string) error {
