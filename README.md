@@ -11,6 +11,8 @@ Currently supported platforms:
 * Windows 8
 * Windows 8.1
 
+[README in Japanese](README_ja.md)
+
 ## Prerequisite
 
 This command assumes that the display language in a modern.IE virtual machine is English.
