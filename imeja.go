@@ -3,7 +3,6 @@ package moderniejapanizer
 import (
 	"fmt"
 	"os/exec"
-	"time"
 
 	wa "github.com/hnakamur/w32uiautomation"
 	"github.com/hnakamur/w32version"
@@ -23,7 +22,6 @@ func switchInputMethodJaWin8() error {
 		return err
 	}
 	fmt.Println("Opened control panel. Waiting the window to populated.")
-	time.Sleep(time.Second)
 
 	auto, err := wa.NewUIAutomation()
 	if err != nil {
@@ -38,11 +36,17 @@ func switchInputMethodJaWin8() error {
 	defer root.Release()
 	fmt.Println("Got RootElement")
 
-	languageWin, err := findElementByName(auto, root, "Language")
+	languageWin, err := findChildElementByName(auto, root, "Language")
 	if err != nil {
 		return err
 	}
 	fmt.Println(`Found "Language" window`)
+
+	languageWinName, err := languageWin.Get_CurrentName()
+	if err != nil {
+		return err
+	}
+	fmt.Printf("languageWinName=%s\n", languageWinName)
 
 	addALanguageLink, err := findElementByName(auto, languageWin, "Add a language")
 	if err != nil {
@@ -55,8 +59,7 @@ func switchInputMethodJaWin8() error {
 	}
 	fmt.Println(`Invoked "Add a language" link`)
 
-	time.Sleep(time.Second)
-	addLanguagesWin, err := findElementByName(auto, root, "Add languages")
+	addLanguagesWin, err := findChildElementByName(auto, root, "Add languages")
 	if err != nil {
 		return err
 	}
@@ -72,8 +75,7 @@ func switchInputMethodJaWin8() error {
 	}
 	fmt.Println(`Invoked "Japanese" listItem`)
 
-	time.Sleep(time.Second)
-	languageWin, err = findElementByName(auto, root, "Language")
+	languageWin, err = findChildElementByName(auto, root, "Language")
 	if err != nil {
 		return err
 	}
@@ -122,9 +124,22 @@ func switchInputMethodJaWin8() error {
 	return nil
 }
 
+func findChildElementByName(auto *wa.IUIAutomation, start *wa.IUIAutomationElement, elementName string) (*wa.IUIAutomationElement, error) {
+	condVal := wa.NewVariantString(elementName)
+	condition, err := auto.CreatePropertyCondition(wa.UIA_NamePropertyId, condVal)
+	if err != nil {
+		return nil, err
+	}
+	return wa.WaitFindFirst(start, wa.TreeScope_Children, condition)
+}
+
 func findElementByName(auto *wa.IUIAutomation, start *wa.IUIAutomationElement, elementName string) (*wa.IUIAutomationElement, error) {
-	return wa.WaitFindFirstWithBreadthFirstSearch(
-		auto, start, wa.NewElemMatcherFuncWithName(elementName))
+	condVal := wa.NewVariantString(elementName)
+	condition, err := auto.CreatePropertyCondition(wa.UIA_NamePropertyId, condVal)
+	if err != nil {
+		return nil, err
+	}
+	return wa.WaitFindFirst(start, wa.TreeScope_Subtree, condition)
 }
 
 func findParentElementByChildName(auto *wa.IUIAutomation, start *wa.IUIAutomationElement, childName string) (*wa.IUIAutomationElement, error) {
