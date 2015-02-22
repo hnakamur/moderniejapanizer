@@ -130,7 +130,7 @@ func findChildElementByName(auto *wa.IUIAutomation, start *wa.IUIAutomationEleme
 	if err != nil {
 		return nil, err
 	}
-	return wa.WaitFindFirst(start, wa.TreeScope_Children, condition)
+	return wa.WaitFindFirst(auto, start, wa.TreeScope_Children, condition)
 }
 
 func findElementByName(auto *wa.IUIAutomation, start *wa.IUIAutomationElement, elementName string) (*wa.IUIAutomationElement, error) {
@@ -139,7 +139,7 @@ func findElementByName(auto *wa.IUIAutomation, start *wa.IUIAutomationElement, e
 	if err != nil {
 		return nil, err
 	}
-	return wa.WaitFindFirst(start, wa.TreeScope_Subtree, condition)
+	return wa.WaitFindFirst(auto, start, wa.TreeScope_Subtree, condition)
 }
 
 func findParentElementByChildName(auto *wa.IUIAutomation, start *wa.IUIAutomationElement, childName string) (*wa.IUIAutomationElement, error) {
